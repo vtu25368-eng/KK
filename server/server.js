@@ -137,15 +137,15 @@ app.post('/api/login', (req, res) => {
 });
 
 app.post('/api/signup', (req, res) => {
-  const { name, username, password, email } = req.body;
+  const { name, username, password, email, age } = req.body;
   if (!name || !username || !password) return res.status(400).json({ error: 'All fields are required' });
-  const sql = `INSERT INTO users (name, username, password, role, profileName, email) VALUES (?, ?, ?, ?, ?, ?)`;
-  db.run(sql, [name, username.toLowerCase(), password, 'student', name, email || ''], function(err) {
+  const sql = `INSERT INTO users (name, username, password, role, profileName, email, age) VALUES (?, ?, ?, ?, ?, ?, ?)`;
+  db.run(sql, [name, username.toLowerCase(), password, 'student', name, email || '', age || null], function(err) {
     if (err) {
       if (err.message.includes('UNIQUE constraint failed')) return res.status(409).json({ error: 'Username already exists' });
       return res.status(500).json({ error: err.message });
     }
-    res.status(201).json({ id: this.lastID, name, username: username.toLowerCase(), role: 'student', profileName: name, email: email || '' });
+    res.status(201).json({ id: this.lastID, name, username: username.toLowerCase(), role: 'student', profileName: name, email: email || '', age: age || null });
   });
 });
 

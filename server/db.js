@@ -16,11 +16,13 @@ const db = new sqlite3.Database(dbPath, (err) => {
       role TEXT,
       name TEXT,
       profileName TEXT,
-      email TEXT
+      email TEXT,
+      age INTEGER
     )`, (err) => {
       if (!err) {
         db.run(`ALTER TABLE users ADD COLUMN profileName TEXT`, () => {});
         db.run(`ALTER TABLE users ADD COLUMN email TEXT`, () => {});
+        db.run(`ALTER TABLE users ADD COLUMN age INTEGER`, () => {});
         db.get("SELECT COUNT(*) AS count FROM users", (err, row) => {
           if (row && row.count === 0) {
             db.run(`INSERT INTO users (username, password, role, name) VALUES 

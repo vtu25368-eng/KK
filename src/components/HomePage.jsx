@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import PaymentModal from './PaymentModal.jsx';
 import SeatSelection from './SeatSelection.jsx';
+import VenueMap from './VenueMap.jsx';
 import { showToast } from './ToastNotification.jsx';
 
 const DEPARTMENTS = [
@@ -28,6 +29,7 @@ function HomePage({ events, user, onLoginClick, onBookTickets }) {
   const [optimisticEvents, setOptimisticEvents] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState('All');
   const [selectedSeats, setSelectedSeats] = useState([]);
+  const [showMapFor, setShowMapFor] = useState({});
 
   // Coupon state
   const [couponCode, setCouponCode] = useState('');
@@ -319,8 +321,20 @@ function HomePage({ events, user, onLoginClick, onBookTickets }) {
                     <button className={`btn ${isSoldOut ? 'btn--ghost' : 'btn--primary'}`} style={{ flex: 1 }} disabled={isSoldOut} onClick={() => openBooking(ev)}>
                       {isSoldOut ? '🚫 Sold Out' : '🎫 Book Now'}
                     </button>
+                    <button
+                      className={`btn btn--ghost btn--sm ${showMapFor[ev.id] ? 'btn--map-active' : ''}`}
+                      onClick={() => setShowMapFor(prev => ({ ...prev, [ev.id]: !prev[ev.id] }))}
+                      title={showMapFor[ev.id] ? 'Hide Map' : 'View Map'}
+                    >
+                      📍 {showMapFor[ev.id] ? 'Hide' : 'Map'}
+                    </button>
                     <button className="btn btn--ghost btn--sm" onClick={() => shareEvent(ev)} title="Share">📤</button>
                   </div>
+                  {showMapFor[ev.id] && (
+                    <div className="event-card__map-section">
+                      <VenueMap venue={ev.venue} height={180} />
+                    </div>
+                  )}
                 </div>
               </div>
             );

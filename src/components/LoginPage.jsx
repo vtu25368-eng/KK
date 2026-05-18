@@ -2,7 +2,7 @@ import React, { useState, useRef } from 'react';
 
 function LoginPage({ onLogin, onClose }) {
   const [mode, setMode] = useState('signin');
-  const [formData, setFormData] = useState({ name: '', username: '', password: '', email: '', phone: '' });
+  const [formData, setFormData] = useState({ name: '', username: '', password: '', email: '', phone: '', age: '' });
   const [errors, setErrors] = useState({});
   const [isLoading, setIsLoading] = useState(false);
   const [verifyCode, setVerifyCode] = useState(['', '', '', '', '', '']);
@@ -29,6 +29,7 @@ function LoginPage({ onLogin, onClose }) {
     if (!formData.name.trim()) errs.name = 'Name required';
     if (!formData.username.trim()) errs.username = 'Username required';
     if (!formData.password.trim() || formData.password.length < 6) errs.password = 'Min 6 characters';
+    if (!formData.age || isNaN(formData.age) || Number(formData.age) <= 0) errs.age = 'Valid age required';
     setErrors(errs);
     return Object.keys(errs).length === 0;
   };
@@ -169,7 +170,7 @@ function LoginPage({ onLogin, onClose }) {
           method: 'POST', headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
             name: formData.name.trim(), username: formData.username.trim().toLowerCase(),
-            password: formData.password.trim(), email: emailVal,
+            password: formData.password.trim(), email: emailVal, age: formData.age
           }),
         });
         const signupData = await signupRes.json();
@@ -267,6 +268,8 @@ function LoginPage({ onLogin, onClose }) {
               <input name="username" className={`form-group__input ${errors.username?'form-group__input--error':''}`} placeholder="Choose a username" value={formData.username} onChange={handleChange}/>{errors.username && <div className="form-group__error">⚠ {errors.username}</div>}</div>
               <div className="form-group"><label className="form-group__label form-group__label--req">Password</label>
               <input name="password" type="password" className={`form-group__input ${errors.password?'form-group__input--error':''}`} placeholder="Min 6 characters" value={formData.password} onChange={handleChange}/>{errors.password && <div className="form-group__error">⚠ {errors.password}</div>}</div>
+              <div className="form-group"><label className="form-group__label form-group__label--req">Age</label>
+              <input name="age" type="number" min="1" className={`form-group__input ${errors.age?'form-group__input--error':''}`} placeholder="Enter your age" value={formData.age} onChange={handleChange}/>{errors.age && <div className="form-group__error">⚠ {errors.age}</div>}</div>
 
               <div className="login-divider"><span>Continue with</span></div>
 

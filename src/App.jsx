@@ -4,6 +4,7 @@ import AdminDashboard from './components/AdminDashboard.jsx';
 import HomePage from './components/HomePage.jsx';
 import ProfilePage from './components/ProfilePage.jsx';
 import MyBookingsPage from './components/MyBookingsPage.jsx';
+import ChatBot from './components/ChatBot.jsx';
 import ToastContainer, { showToast } from './components/ToastNotification.jsx';
 
 function App() {
@@ -198,6 +199,7 @@ function App() {
         <footer className="app-footer" id="app-footer">© 2026 EventHub — Department Event Ticket Booking System. All rights reserved.</footer>
       </div>
 
+      <ChatBot events={events} />
       <ToastContainer />
     </>
   );
